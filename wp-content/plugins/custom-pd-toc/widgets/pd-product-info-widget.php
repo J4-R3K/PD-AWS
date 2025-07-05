@@ -261,6 +261,13 @@ class PD_Product_Info_Widget extends Widget_Base {
             'placeholder' => 'https://projectdesign.io/faq',
         ]);
 
+        // Log Link
+        $this->add_control('log_link', [
+            'label' => __( 'Log Link', 'pd-toc' ),
+            'type' => Controls_Manager::URL,
+            'placeholder' => 'https://projectdesign.io/log',
+        ]);
+
         $this->end_controls_section();
 
         // === Quality Assurance ===
@@ -409,7 +416,7 @@ class PD_Product_Info_Widget extends Widget_Base {
 
     /**
      * Get product data from WooCommerce
-     * FIXED: Now properly extracts attribute values
+     * FIXED: Now properly removes pa_ prefix from attribute names
      */
     private function get_product_data($product_id) {
         if (!$product_id || !class_exists('WooCommerce')) {
@@ -421,7 +428,7 @@ class PD_Product_Info_Widget extends Widget_Base {
             return [];
         }
 
-        // Enhanced attribute processing
+        // Enhanced attribute processing with pa_ prefix removal
         $attributes = [];
         $product_attributes = $product->get_attributes();
 
@@ -430,8 +437,16 @@ class PD_Product_Info_Widget extends Widget_Base {
                 $attr_data = $attribute->get_data();
                 $attribute_name = $attr_data['name'];
 
-                // Clean up attribute name for display
-                $display_name = ucfirst(str_replace(['_', '-', 'pa_'], ' ', $attribute_name));
+                // Clean up attribute name for display - ENHANCED
+                $display_name = $attribute_name;
+
+                // Remove 'pa_' prefix if present
+                if (strpos($display_name, 'pa_') === 0) {
+                    $display_name = substr($display_name, 3); // Remove first 3 characters (pa_)
+                }
+
+                // Clean up remaining formatting: underscores/hyphens to spaces, capitalize
+                $display_name = ucwords(str_replace(['_', '-'], ' ', $display_name));
 
                 // Handle taxonomy-based attributes (global attributes)
                 if ($attribute->is_taxonomy()) {
@@ -455,7 +470,7 @@ class PD_Product_Info_Widget extends Widget_Base {
             'url' => get_permalink($product_id),
             'date_created' => $product->get_date_created(),
             'date_modified' => $product->get_date_modified(),
-            'attributes' => $attributes, // Use processed attributes
+            'attributes' => $attributes, // Use processed attributes with clean names
             'average_rating' => $product->get_average_rating(),
             'meta_data' => $product->get_meta_data(),
         ];
@@ -464,8 +479,12 @@ class PD_Product_Info_Widget extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        // Enhanced inline CSS to prevent WordPress theme conflicts
+        // Enhanced inline CSS to set IBM Plex Sans and Condensed
         echo '<style>
+        .pd-product-info-container,
+        .pd-product-info-container * {
+            font-family: "IBM Plex Sans", "IBM Plex Sans Condensed", Arial, sans-serif !important;
+        }
         .pd-product-info-container .pd-expand-toggle {
             background: #f8f9fa !important;
             border: 1px solid #bdc3c7 !important;
@@ -482,7 +501,6 @@ class PD_Product_Info_Widget extends Widget_Base {
             gap: 8px !important;
             transition: all 0.3s ease !important;
             box-sizing: border-box !important;
-            font-family: inherit !important;
             text-decoration: none !important;
             outline: none !important;
             font-weight: normal !important;
@@ -611,10 +629,11 @@ class PD_Product_Info_Widget extends Widget_Base {
                                 </div>
                             <?php endif; ?>
 
-                            <?php if ($settings['testing_status']): ?>
+                            <!-- Regional Variants as a grid item -->
+                            <?php if (!empty($settings['regional_variants'])): ?>
                                 <div class="pd-detail-item">
-                                    <span class="pd-detail-label"><?php _e('Tested with:', 'pd-toc'); ?></span>
-                                    <span class="pd-detail-value"><?php echo esc_html($settings['testing_status']); ?></span>
+                                    <span class="pd-detail-label"><?php _e('Regional Variants:', 'pd-toc'); ?></span>
+                                    <span class="pd-detail-value"><?php echo esc_html(implode(', ', array_map('ucwords', str_replace('_', ' ', $settings['regional_variants'])))); ?></span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -636,7 +655,7 @@ class PD_Product_Info_Widget extends Widget_Base {
                             </div>
                         <?php endif; ?>
 
-                        <!-- Product Attributes (from WooCommerce) - FIXED -->
+                        <!-- Product Attributes (from WooCommerce) -->
                         <?php if (!empty($attributes)): ?>
                             <div class="pd-attributes">
                                 <span class="pd-label"><?php _e('Specifications:', 'pd-toc'); ?></span>
@@ -682,6 +701,23 @@ class PD_Product_Info_Widget extends Widget_Base {
                                     </a>
                                 </div>
                             <?php endif; ?>
+
+                            <?php if (!empty($settings['log_link']['url'])): ?>
+                                <div class="pd-support-item">
+                                    <span class="pd-support-label"><?php _e('Log:', 'pd-toc'); ?></span>
+                                    <a href="<?php echo esc_url($settings['log_link']['url']); ?>" class="pd-log-link" target="_blank">
+                                        <?php _e('View Log', 'pd-toc'); ?> <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (!empty($settings['support_method'])): ?>
+                                <div class="pd-support-item">
+                                    <span class="pd-support-label"><?php _e('Support Method:', 'pd-toc'); ?></span>
+                                    <div class="pd-support-method-list"><?php echo esc_html(implode(', ', array_map('ucwords', str_replace('_', ' ', $settings['support_method'])))); ?></div>
+                                </div>
+                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div>
@@ -705,6 +741,21 @@ class PD_Product_Info_Widget extends Widget_Base {
                                         </div>
                                     </div>
                                 <?php endif; ?>
+
+                                <?php if ($settings['testing_status']): ?>
+                                    <div class="pd-detail-item">
+                                        <span class="pd-detail-label"><?php _e('Tested with:', 'pd-toc'); ?></span>
+                                        <span class="pd-detail-value"><?php echo esc_html($settings['testing_status']); ?></span>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($settings['compatibility_notes'])): ?>
+                                    <div class="pd-detail-item">
+                                        <span class="pd-detail-label"><?php _e('Compatibility Notes:', 'pd-toc'); ?></span>
+                                        <span class="pd-detail-value"><?php echo esc_html($settings['compatibility_notes']); ?></span>
+                                    </div>
+                                <?php endif; ?>
+
 
                                 <?php if ($settings['qa_compliance'] === 'yes'): ?>
                                     <div class="pd-quality-item">

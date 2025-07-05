@@ -47,7 +47,7 @@
 }
 
 /* =============================================
-   PD TXT Highlight and CC (NEW)
+   PD TXT Highlight and CC
    ============================================= */
 .pd-highlight-container {
   position: relative;
@@ -75,26 +75,6 @@
   display: inline-block;
 }
 
-/* =============================================
-   PD TXT Highlight and CC  (unchanged)
-   ============================================= */
-.pd-highlight-container{
-  position:relative;
-  display:block;
-}
-.pd-highlight-content{ /* editable in Elementor */ }
-.pd-copy-button{
-  position:absolute;
-  top:8px;right:8px;
-  display:none;
-  padding:.3em .6em;
-  font-size:14px;
-  border:none;
-  cursor:pointer;
-  z-index:999;
-  transition:opacity .2s ease;
-}
-.pd-highlight-container:hover .pd-copy-button{display:inline-block;}
 /* =============================================
    PD Woo Products – grid & cards
    ============================================= */
@@ -702,6 +682,18 @@
     }
 }
 
+.pd-quality-items .pd-detail-item {
+    border-left: 3px solid #9b59b6;
+    background: white;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
 /* Layout Variations */
 .pd-product-info-container[data-layout="full_expanded"] .pd-expand-toggle {
     display: none;
@@ -737,4 +729,13 @@
 
 .pd-product-info-container[data-layout="accordion"] .pd-section-content {
     padding: 15px;
+}
+
+/*To ensure the icons will show */
+.pd-product-info-container .fa,
+.pd-product-info-container .fas,
+.pd-product-info-container .fab,
+.pd-product-info-container .far {
+    font-family: "Font Awesome 5 Free", "FontAwesome", Arial, sans-serif !important;
+    font-weight: 900 !important;
 }

@@ -668,5 +668,10 @@ function pd_duplicate_post_link( $actions, $post ) {
 add_filter( 'post_row_actions', 'pd_duplicate_post_link', 10, 2 );
 add_filter( 'page_row_actions', 'pd_duplicate_post_link', 10, 2 );
 
+/*this is to ensure icons are showing in PD widgets */
+add_action('wp_enqueue_scripts', function() {
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+});
+
 
 ?>
