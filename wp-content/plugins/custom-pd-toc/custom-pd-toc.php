@@ -216,6 +216,10 @@ function pd_register_widgets( $widgets_manager ) {
     require_once __DIR__ . '/widgets/pd-advanced_data_table.php';
     $widgets_manager->register( new \Elementor\PD_Advanced_Data_Table_Widget() );
 
+    // Add to the pd_register_widgets function
+    require_once __DIR__ . '/widgets/pd-product-info-widget.php';
+    $widgets_manager->register( new \Elementor\PD_Product_Info_Widget() );
+
 }
 add_action( 'elementor/widgets/register', 'pd_register_widgets' );
 
