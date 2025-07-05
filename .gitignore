@@ -33,24 +33,22 @@ wp-config.php
 # Themes & plugins we don’t care about
 ########################################
 /wp-content/themes/twenty*/
-/wp-content/plugins/**
+/wp-content/plugins/**                     # ignore every plugin by default
 
 ########################################
 # Keep YOUR code – whitelists below
 ########################################
-!wp-content/themes/hello-elementor-child/**
+!wp-content/plugins/                       # <-- allow Git to descend
+!wp-content/plugins/custom-pd-toc/         # <-- allow the folder itself
+!wp-content/plugins/custom-pd-toc/**       # <-- track everything inside
 
-# Main plugin – track code, skip heavy fonts
-!wp-content/plugins/custom-pdf-invoices/**
-/wp-content/plugins/custom-pdf-invoices/vendor/**/*.ttf
-/wp-content/plugins/custom-pdf-invoices/vendor/**/*.otf
-
-# Other custom plugins you want to track
+# you can leave the other custom-plugin rules as they were
 !wp-content/plugins/horizontal-scroll-index/**
 !wp-content/plugins/pd-mailpoet-automation-cloner/**
 !wp-content/plugins/PD_warm_cf_cache/**
 !wp-content/plugins/pdnotion/**
-!wp-content/plugins/custom-pd-toc/**
+!wp-content/plugins/generator-load-calculator/**
+!wp-content/plugins/custom-pdf-invoices/**
 
 ########################################
 # OS odds-and-ends
