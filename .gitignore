@@ -47,7 +47,6 @@ wp-config.php
 
 # the other custom plugins you want to track
 !wp-content/plugins/horizontal-scroll-index/**
-!wp-content/plugins/pd-product-info-widget.php/**
 !wp-content/plugins/pd-mailpoet-automation-cloner/**
 !wp-content/plugins/PD_warm_cf_caches/**
 !wp-content/plugins/pdnotion/**
