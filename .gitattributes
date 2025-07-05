@@ -1,2 +1,5 @@
-* text eol=crlf
-* text eol=lf
+# Use LF for all text files that Git can safely detect
+* text=auto eol=lf
+
+# Never treat the typical binary formats as text
+*.{png,jpg,jpeg,gif,svg,ttf,otf,woff,woff2,eot} -text
