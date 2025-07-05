@@ -1,0 +1,18 @@
+/* Base taken from EAEL, selector renamed */
+.pd-img-compare{
+    box-sizing:border-box;
+    cursor:pointer;
+    line-height:0;
+    margin:0 auto;
+    overflow:hidden;
+    padding:0;
+    position:relative;
+    user-select:none
+}
+.pd-img-compare *{box-sizing:inherit}
+.pd-img-compare img,
+.pd-img-compare picture>img{max-width:none!important}
+.pd-img-compare>img,
+.pd-img-compare>picture>img{display:block;width:100%}
+.pd-img-compare>div:first-child,
+picture .pd-img-compare>div{height:100%;left:0;overflow:hidden;position:absolute;top:0;width:50%}

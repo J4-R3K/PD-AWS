@@ -1,0 +1,287 @@
+/* =============================================
+   PD TOC (existing)
+   ============================================= */
+.pd-toc-container {
+  position: relative;
+  margin: 1em 0;
+}
+
+/* Header row: Title + toggle on the same line */
+.pd-toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pd-toc-title {
+  margin: 0;
+  font-weight: bold;
+}
+
+.pd-toc-toggle {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2em 0.5em;
+}
+
+.pd-toc-icon i,
+.pd-toc-icon svg {
+  background: none !important;
+  color: #2957CB !important;
+  fill: #2957CB !important;
+  width: 1em;
+  height: 1em;
+  transition: transform 0.2s, color 0.2s, fill 0.2s;
+}
+
+.pd-toc-list {
+  margin-top: 1em;
+  padding-left: 1.5em;
+}
+
+.pd-toc-list li {
+  margin-bottom: 0.3em;
+}
+
+/* =============================================
+   PD TXT Highlight and CC (NEW)
+   ============================================= */
+.pd-highlight-container {
+  position: relative;
+  display: block;
+}
+
+.pd-highlight-content {
+  /* Customizable by Elementor */
+}
+
+.pd-copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: none;
+  padding: 0.3em 0.6em;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+  transition: opacity 0.2s ease;
+}
+
+.pd-highlight-container:hover .pd-copy-button {
+  display: inline-block;
+}
+
+/* =============================================
+   PD TXT Highlight and CC  (unchanged)
+   ============================================= */
+.pd-highlight-container{
+  position:relative;
+  display:block;
+}
+.pd-highlight-content{ /* editable in Elementor */ }
+.pd-copy-button{
+  position:absolute;
+  top:8px;right:8px;
+  display:none;
+  padding:.3em .6em;
+  font-size:14px;
+  border:none;
+  cursor:pointer;
+  z-index:999;
+  transition:opacity .2s ease;
+}
+.pd-highlight-container:hover .pd-copy-button{display:inline-block;}
+/* =============================================
+   PD Woo Products – grid & cards
+   ============================================= */
+
+/* Grid wrapper */
+.pd-woo-products-grid.products{
+  display:grid;
+  gap:var(--pd-gap,2em);              /* Elementor Gap overrides */
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+/* Kill Woo clearfix ghosts */
+.pd-woo-products-grid.products::before,
+.pd-woo-products-grid.products::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Desktop presets – apply only ≥ 768 px */
+@media (min-width:768px){
+  .pd-woo-products-grid.columns-2{grid-template-columns:repeat(2,1fr);}
+  .pd-woo-products-grid.columns-3{grid-template-columns:repeat(3,1fr);}
+  .pd-woo-products-grid.columns-4{grid-template-columns:repeat(4,1fr);}
+}
+/* nothing else sets columns below 768 px → Elementor responsive control wins */
+
+/* Neutralise Woo float helpers */
+.pd-woo-products-grid.products > li.product,
+.pd-woo-products-grid.products > li.product.first,
+.pd-woo-products-grid.products > li.product.last{
+  width:auto!important;
+  margin:0!important;
+  float:none!important;
+  clear:none!important;
+}
+
+/* Card */
+.pd-woo-products-grid .product{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  background:#fff;
+  padding:1em;                           /* Elementor Card Padding overrides */
+  border:1px solid #ddd;
+  border-radius:8px;
+  box-sizing:border-box;
+}
+.pd-woo-products-grid .product img{width:100%;height:auto;display:block;}
+.pd-woo-products-grid .product .woocommerce-loop-product__title{margin:0 0 .5em;flex-grow:1;}
+.pd-woo-products-grid .product .price{margin-bottom:.5em;color:inherit;}
+.pd-woo-products-grid .product .button{margin-top:auto;width:100%;text-align:center;display:block;}
+
+/* Pagination (unchanged) */
+.pd-pagination-wrapper{grid-column:1/-1;display:flex;justify-content:center;
+  margin-top:2em;padding-top:2em;border-top:1px solid #ccc;min-height:48px;}
+.pd-pagination{display:flex;gap:.5em;flex-wrap:wrap;margin:0;padding:0;list-style:none;}
+.pd-pagination a,.pd-pagination span{padding:.5em 1em;border:1px solid #ccc;text-decoration:none;
+  color:#333;border-radius:4px;transition:background .2s;}
+.pd-pagination a:hover{background:#f0f0f0;}
+.pd-pagination .current{background:#000;color:#fff;}
+
+
+/* =============================================
+   Filter bar
+   ============================================= */
+.pd-woo-products-filter {
+    margin-bottom: 1.5em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+/* Label wrapper */
+.pd-filter-label {
+    flex: 1 1 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    margin-top: 0.75em;
+    min-width: 0; /* allow it to shrink/expand */
+}
+
+/* Dropdown selects */
+.pd-filter-select {
+    width: 100%;
+    padding: 0.4em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Apply & Reset buttons */
+.pd-filter-button,
+.pd-filter-reset {
+    padding: 0.5em 1em;
+    border: 1px solid #2957CB;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.75em;
+}
+
+/* Button colors */
+.pd-filter-button {
+    background: #0052cc;
+    color: #fff;
+}
+.pd-filter-button:hover {
+    background: #003e99;
+}
+.pd-filter-reset {
+    background: #ccc;
+    color: #000;
+}
+.pd-filter-reset:hover {
+    background: #aaa;
+}
+.pd-filter-button + .pd-filter-reset {
+    margin-left: 0.75em;
+}
+
+/* Tablet (≤1024px): stack everything and stretch */
+@media (max-width: 1024px) {
+    /* Put title & form into one column */
+    .pd-woo-products-filter {
+        flex-direction: column;
+    }
+    /* Make title and form full-width */
+    .pd-woo-products-filter h4.pd-filter-title,
+    .pd-woo-products-filter form {
+        width: 100%;
+        max-width: 100%;
+    }
+    /* Labels and selects full-width */
+    .pd-filter-label {
+        flex: 1 0 100% !important;
+        max-width: 100% !important;
+    }
+    .pd-filter-select {
+        width: 100% !important;
+    }
+}
+
+/* Mobile (≤600px): same as tablet but you already had this */
+@media (max-width: 600px) {
+    .pd-woo-products-filter {
+        flex-direction: column;
+    }
+    .pd-woo-products-filter h4.pd-filter-title,
+    .pd-woo-products-filter form {
+        width: 100%;
+        max-width: 100%;
+    }
+    .pd-filter-label {
+        flex: 1 0 100% !important;
+        max-width: 100% !important;
+    }
+    .pd-filter-select {
+        width: 100% !important;
+    }
+}
+
+/* Final override for button borders */
+.pd-woo-products-filter .pd-filter-button,
+.pd-woo-products-filter .pd-filter-reset {
+    border-color: #2957CB;
+}
+
+/* Default toggle button style for all devices */
+.pd-toc-toggle {
+    background: #fff !important;
+    color: #2957CB !important;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Toggle button on hover/focus for accessibility */
+.pd-toc-toggle:hover,
+.pd-toc-toggle:focus {
+    background: #fff !important;
+    color: #C15959 !important;
+}

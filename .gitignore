@@ -33,7 +33,7 @@ wp-config.php
 # themes & plugins we don’t care about
 ########################################
 /wp-content/themes/twenty*/
-/wp-content/plugins/hello.php
+/wp-content/plugins/**            # ignore everything under plugins
 
 ########################################
 # Keep **your** code – whitelist below

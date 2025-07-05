@@ -1,5 +1,0 @@
-# ------ WordPress you don’t want ------
-wp-config.php
-wp-content/uploads/
-upgrade/
-.htaccess

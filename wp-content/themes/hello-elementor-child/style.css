@@ -1,0 +1,336 @@
+/*
+ Theme Name: hello-elementor-child
+ Theme URI:
+ Description: hello-elementor Child Theme
+ Author: Jarek Wityk
+ Author URI:
+ Template: hello-elementor
+ Version: 1.0.0
+*/
+
+/* Reserve square ratio for product thumbnails */
+.woocommerce ul.products li.product img.attachment-woocommerce_thumbnail {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* === Fix CLS on product grid thumbnails === */
+.woocommerce ul.products li.product img {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+}
+/* --- WooCommerce Additional Information table tweaks --- */
+.woocommerce #tab-additional_information table.shop_attributes {
+  border-collapse: collapse; /* makes borders “join” */
+  width: 100%;
+}
+
+/* Remove all cell borders */
+.woocommerce #tab-additional_information table.shop_attributes th,
+.woocommerce #tab-additional_information table.shop_attributes td {
+  border: none !important;
+}
+
+/* Optional: indent the values column */
+.woocommerce #tab-additional_information table.shop_attributes td {
+  padding-left: 1.5em;
+}
+
+/* Optional: make the attribute names bolder or a different color */
+.woocommerce #tab-additional_information table.shop_attributes th {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ==============================
+   Style WooCommerce Login Form
+   ============================== */
+
+/* Woo My-Account widget – hide the “Login / Register” headings */
+.elementor-widget-woocommerce-my-account
+.e-my-account-tab:not(.e-my-account-tab__dashboard--custom) .woocommerce h2,
+.elementor-widget-woocommerce-my-account
+.e-my-account-tab:not(.e-my-account-tab__dashboard--custom) .woocommerce h3{
+  display:none !important;   /* heading gone, form stays */
+}
+
+
+/* 0) Card wrapper --------------------------------------------------------- */
+form.woocommerce-form-login {
+  background: #fff;                                 /* visible against light grey body */
+  border: 1px solid #e3e7ee;                        /* soft edge */
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);           /* subtle elevation */
+  border-radius: 4px;
+  padding: 2rem 2.5rem 2.5rem !important;           /* kill the inline height & use padding */
+  height: auto !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+/* 1) Text inputs ---------------------------------------------------------- */
+form.woocommerce-form-login input[type="text"],
+form.woocommerce-form-login input[type="email"],
+form.woocommerce-form-login input[type="password"] {
+  background: #ffffff;
+  border: 1px solid #cdd6e4;
+  border-radius: 3px;
+  padding: 0.75em 1em;
+  width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+form.woocommerce-form-login input:focus {
+  outline: none;
+  border-color: #2957CB;                            /* primary accent */
+  box-shadow: 0 0 0 2px rgba(41,87,203,.25);
+}
+
+/* 2) Placeholder & label colouring --------------------------------------- */
+form.woocommerce-form-login ::placeholder {
+  color: #5E6782;                                   /* legible grey */
+  opacity: 1;
+}
+
+/*form.woocommerce-form-login label {
+  font-weight: 600;
+  color: #C15959;
+}
+*/
+/* 3) Remember-me ---------------------------------------------------------- */
+form.woocommerce-form-login .woocommerce-form__label-for-checkbox {
+  margin-left: 0.5em;                               /* nudge away from checkbox */
+  color: #5E6782;
+}
+
+/* 4) Lost-password link --------------------------------------------------- */
+form.woocommerce-form-login .lost_password a {
+  color: #2957CB;
+  text-decoration: underline;
+}
+form.woocommerce-form-login .lost_password a:hover {
+  color: #003F7F;                                   /* darker shade on hover */
+}
+
+/* 5) “Show password” eye icon -------------------------------------------- */
+form.woocommerce-form-login .show-password-input::after {
+  color: #5E6782;                                   /* make icon visible */
+  transition: color .15s;
+}
+form.woocommerce-form-login .show-password-input:hover::after {
+  color: #2957CB;
+}
+
+/* 5a) Space out the Captcha a little */
+form.woocommerce-form-login .g-recaptcha-login-i13 {
+  margin: 1em 0 !important;
+}
+
+/* 6) Submit button -------------------------------------------------------- */
+form.woocommerce-form-login button.woocommerce-form-login__submit {
+  background: #2957CB;
+  border-color: #2957CB;
+  color: #fff;
+  padding: .75em 1.75em;
+  font-weight: 600;
+  border-radius: 3px;
+  transition: background .15s, box-shadow .15s;
+}
+form.woocommerce-form-login button.woocommerce-form-login__submit:hover,
+form.woocommerce-form-login button.woocommerce-form-login__submit:focus {
+  background: #003F7F;
+  box-shadow: 0 0 0 2px rgba(41,87,203,.35);
+}
+
+/* 7) reCAPTCHA spacing ---------------------------------------------------- */
+form.woocommerce-form-login .g-recaptcha-login-i13 {
+  margin: 1.25em 0;
+}
+
+/*
+============================================
+Style the “Lost your password?” link in login
+============================================ */
+
+form.woocommerce-form-login .lost_password a {
+  color: #2957CB !important;          /* your brand blue */
+  text-decoration: underline;         /* optional, to make it obvious it’s a link */
+}
+
+form.woocommerce-form-login .lost_password a:hover {
+  color: #C15959 !important;          /* Secondary Accent on hover */
+}
+
+/* ======================================================
+   WooCommerce – My-Account refined  (PD 2025-07-03 v2)
+   ===================================================== */
+
+/* 0. Page backdrop ------------------------------------------------------ */
+body.woocommerce-account {
+  background:#F5F5F5;         /* site-wide grey          */
+}
+
+/* 1. Card wrapper (nav + content) -------------------------------------- */
+.woocommerce-account .woocommerce {        /* the flex container */
+  display:flex;
+  align-items:flex-start;                /* keep top-aligned   */
+  max-width:900px;
+  margin:2.5rem auto;                    /* centred on page    */
+  padding:2rem 2.5rem;
+  background:#fff;
+  border:1px solid #E3E7EE;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  border-radius:4px;
+}
+
+/* 2. Left navigation ---------------------------------------------------- */
+.woocommerce-MyAccount-navigation{
+  width:230px;
+  margin-right:2rem;
+}
+.woocommerce-MyAccount-navigation ul{
+  margin:0; padding:0; list-style:none;
+}
+.woocommerce-MyAccount-navigation a{
+  display:block;
+  padding:.65em 1em;
+  font-weight:600;
+  color:#5E6782;
+  background:#F8F9FB;
+  border-left:3px solid transparent;
+  border-radius:3px;
+  transition:all .15s;
+}
+
+/* active + hover states */
+.woocommerce-MyAccount-navigation li.is-active a{
+  color:#2957CB!important;               /* brand primary      */
+  border-left-color:#2957CB;
+  background:#EFF4FF;
+}
+.woocommerce-MyAccount-navigation a:hover{
+  color:#C15959;                         /* requested hover    */
+  border-left-color:#1B3FA1;
+  background:#EFF4FF;
+}
+
+/* 3. Content pane ------------------------------------------------------- */
+.woocommerce-MyAccount-content{
+  flex:1 1 auto;
+  padding:1.75rem 0 0 0;     /* no border – matches “original” feel */
+  border:none;
+}
+
+/* tidy up the “Hello Name” dashboard notice ---------------------------- */
+.woocommerce-account .woocommerce .woocommerce-message,
+.woocommerce-account .woocommerce .woocommerce-info{
+  border:none;               /* kill the table-y frame              */
+  margin:0 0 2rem 0;         /* bring it up under nav               */
+  padding:0;
+}
+
+/* Global buttons inside My-Account */
+.woocommerce-account .woocommerce a.button,
+.woocommerce-account .woocommerce button.button,
+.woocommerce-account .woocommerce input.button,
+.woocommerce-account .woocommerce .woocommerce-button{
+  background:#2957CB;
+  border:1px solid #2957CB;
+  color:#fff;
+  border-radius:4px;
+  padding:.6em 1.4em;
+  font-weight:600;
+  transition:background .15s,border .15s;
+}
+.woocommerce-account .woocommerce a.button:hover,
+.woocommerce-account .woocommerce button.button:hover,
+.woocommerce-account .woocommerce input.button:hover,
+.woocommerce-account .woocommerce .woocommerce-button:hover{
+  background:#003F7F;
+  border-color:#003F7F;
+}
+
+/* 5. Mobile stack ------------------------------------------------------- */
+@media (max-width:767px){
+  .woocommerce-account .woocommerce{
+    flex-direction:column;
+    padding:1.5rem;
+  }
+  .woocommerce-MyAccount-navigation{
+    width:100%;
+    margin:0 0 1.5rem 0;
+  }
+}
+/* ======================================================
+   Woo My-Account – colour refinements (PD 2025-07-03 v2.1)
+   ===================================================== */
+
+/* 1.  Left-nav HOVER state → #1B3FA1  -------------------- */
+.woocommerce-MyAccount-navigation a:hover,
+.woocommerce-MyAccount-navigation li.is-active a:hover{
+  color:#C15959 !important;
+  border-left-color:#1B3FA1 !important;
+}
+
+/* 2-A.  Default (non-hover) colour for inline links -------------------- */
+.woocommerce-MyAccount-content a:not(.button){
+  color:#2957CB !important;          /* brand blue at rest  */
+  border-bottom:1px solid currentColor;
+}
+
+/* 2-B.  Hover state --------------------------------------- */
+.woocommerce-MyAccount-content a:not(.button):hover{
+  color:#C15959 !important;
+  border-bottom-color:#C15959 !important;
+}
+
+/* ============================================================
+   Woo My-Account – universal button styling (PD 2025-07-03 v3)
+   ============================================================ */
+
+/*.woocommerce-account .woocommerce,                       /* scope  */
+.button,                                            /* <a>…  */
+.woocommerce-account .woocommerce button.button,         /* <button> */
+.woocommerce-account .woocommerce input.button,          /* <input> */
+.woocommerce-account .woocommerce .woocommerce-button,   /* legacy */
+.woocommerce-account .woocommerce .button.alt,           /* alt variant */
+.woocommerce-account .woocommerce .button.wc-forward {   /* forward variant */
+  background:#2957CB !important;     /* button brand blue */
+  border:1px solid #2957CB !important;
+  color:#fff !important;
+  border-radius:4px;
+  padding:.6em 1.4em;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  font-weight:600;
+  line-height:1.25;
+  text-decoration:none;
+  display:inline-block;
+  transition:background .15s,border .15s,color .15s;
+}
+
+/*.woocommerce-account .woocommerce,                          /* same list */
+.button:hover,
+.woocommerce-account .woocommerce button.button:hover,
+.woocommerce-account .woocommerce input.button:hover,
+.woocommerce-account .woocommerce .woocommerce-button:hover,
+.woocommerce-account .woocommerce .button.alt:hover,
+.woocommerce-account .woocommerce .button.wc-forward:hover {
+  background:#1B3FA1 !important;     /* darker on hover */
+  border-color:#1B3FA1 !important;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  color:#fff !important;
+}
+
+/* Scroll Progress Bar */
+#pd-scroll-progress {
+  position: fixed;
+  top:    0;
+  left:   0;
+  width:  0%;
+  height: 4px;               /* change thickness here */
+  background: #2957CB;       /* your blue */
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+}

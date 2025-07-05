@@ -1,0 +1,11 @@
+/*
+ Theme Name: hello-elementor-child
+ Theme URI: 
+ Description: hello-elementor  Child Theme
+ Author: Jarek Wityk
+ Author URI: 
+ Template: hello-elementor
+ Version: 1.0.0
+ */
+
+css /* === Fix CLS on product grid thumbnails === */ .woocommerce ul.products li.product img{aspect-ratio:1/1;width:100%;height:auto;}
