@@ -1,0 +1,237 @@
+/******************************************************
+ * GLOBAL WRAPPER / LAYOUT
+ ******************************************************/
+.generator-load {
+    background: #f8f9fa;  /* Light grey background */
+    padding: 7px;        /* Slightly reduced padding */
+    max-width: 100%;     /* Limit to full width of container */
+}
+
+.generator-load h2 {
+    margin-top: 0;       /* Remove default top margin */
+}
+
+/******************************************************
+ * INPUT TABLE (For the User Entry Form)
+ *  - .calc-table references the table in template.php
+ *  - columns are sized differently from the sub-table
+ ******************************************************/
+.calc-table {
+    table-layout: fixed;       /* Fix column widths based on <col> */
+    width: 100%;               /* Fill container width */
+    border-collapse: collapse; /* Merge borders for a cleaner look */
+
+    /* 
+     * Force a min-width so the columns can't get 
+     * too narrow on larger screens:
+     */
+    min-width: 700px; 
+}
+
+/* Basic styling for table cells in .calc-table */
+.calc-table th,
+.calc-table td {
+    padding: 4px;
+    border: 1px solid #ddd;
+    text-align: left;  /* Left-aligned for input fields */
+}
+
+/******************************************************
+ * BUTTONS & FORMS
+ ******************************************************/
+button {
+    background: #007bff;  /* Bootstrap blue */
+    color: white;
+    padding: 8px 15px;
+    margin: 5px 0;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+button:hover {
+    background: #0056b3;
+}
+
+/* Add top margin for the "Export as PDF" button */
+#pdf-form button[type="submit"] {
+    margin-top: 15px;
+}
+
+/******************************************************
+ * FORM SCROLL WRAPPER
+ ******************************************************/
+.form-scroll-container {
+    width: 100%;
+    overflow-x: auto; /* horizontal scroll if needed */
+}
+
+/******************************************************
+ * MOBILE RESPONSIVENESS (MAX WIDTH: 768PX)
+ ******************************************************/
+@media (max-width: 768px) {
+    /* 
+     * columns for the input table (.calc-table) on mobile:
+     *  (1) Equipment
+     *  (2) Load Type
+     *  (3) LRA
+     *  (4) SC
+     *  (5) FLC
+     *  (6) Start Time
+     *  (7) Action
+     */
+    .calc-table colgroup col:nth-child(1) { /* Equipment */
+        width: 20% !important;
+    }
+    .calc-table colgroup col:nth-child(2) { /* Load Type */
+        width: 13% !important;
+    }
+    .calc-table colgroup col:nth-child(3) { /* LRA */
+        width: 10% !important;
+    }
+    .calc-table colgroup col:nth-child(4) { /* SC */
+        width: 10% !important;
+    }
+    .calc-table colgroup col:nth-child(5) { /* FLC */
+        width: 10% !important;
+    }
+    .calc-table colgroup col:nth-child(6) { /* Start Time */
+        width: 10% !important;
+    }
+    .calc-table colgroup col:nth-child(7) { /* Action */
+        width: 7% !important;
+    }
+
+    /* Increase font-size for better readability on phones */
+    .calc-table input[type="text"],
+    .calc-table select {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;  /* bigger text for mobile */
+    }
+
+    /* "Remove" button full width on narrow screens */
+    .calc-table button.remove {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    /* Make "Add Equipment" & "Calculate" full width too */
+    #add-equipment,
+    #calc-button {
+        width: 100%;
+    }
+
+    /* 
+     * Slightly more padding for smaller screens 
+     */
+    .generator-load {
+        padding: 10px;
+    }
+
+    /* 
+     * If you want #equipment-table to be narrower on mobile, 
+     * you could do min-width: 600px; 
+     */
+    #equipment-table {
+        min-width: 700px; 
+    }
+}
+
+/******************************************************
+ * OPTIONAL: Highlight Class (.max-load-highlight)
+ *  - On-screen usage only. PDF uses inline style fallback.
+ ******************************************************/
+.max-load-highlight {
+  background-color: #FFC7CE !important;
+  color: #9C0006 !important;
+  font-weight: bold !important;
+}
+
+/******************************************************
+ * TOOLTIP FOR "?" HELP ICON (Load Type)
+ ******************************************************/
+.tooltip-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: underline dotted #666;
+  color: #000; /* color of the "?" or icon */
+}
+.tooltip-wrap:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  white-space: pre; /* preserve line breaks */
+  background: #333;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 3px;
+  top: 20px;
+  left: 0;
+  z-index: 9999;
+  font-size: 12px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  min-width: 140px; /* optional */
+}
+.tooltip-wrap:hover::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 10px; 
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #333;
+}
+
+/* Sub-tables for T1–T15, T16–T30 */
+.calc-subtable {
+    width: 100%;
+    table-layout: fixed; /* ensures col widths are used */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* 
+   16 columns total: 1 (Equipment) + 15 T columns
+   First col => 19% or 22%
+   T columns => 5.4% or 5.2%
+*/
+.calc-subtable col:first-child {
+    width: 19%;
+}
+.calc-subtable col:nth-child(n+2) {
+    width: 5.4%;
+}
+
+/* For the TH & TD in the calculation sub-table */
+.calc-subtable th,
+.calc-subtable td {
+    padding: 4px;
+    /* Center all columns by default */
+    text-align: center;
+
+    /*
+     * 1) Let font shrink down to 10px or ~0.8vw, 
+     *    but not exceed 14px (or 1rem, pick your max).
+     * 2) Keep text on one line, 
+     *    if it still doesn't fit at min size => ellipsis.
+     */
+    font-size: clamp(10px, 0.8vw, 12px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*
+ * But for the first column (Equipment), override to left-align 
+ * if you prefer: 
+ */
+.calc-subtable tbody tr td:first-child {
+    text-align: left !important;
+    /* We could remove 'white-space: nowrap; overflow...' 
+       if you want Equipment to wrap. But let's keep it consistent. */
+}
+
+/******************************************************
+ * END OF FILE
+ ******************************************************/
