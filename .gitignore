@@ -38,17 +38,37 @@ wp-config.php
 ########################################
 # Keep YOUR code – whitelists below
 ########################################
-!wp-content/plugins/                       # <-- allow Git to descend
-!wp-content/plugins/custom-pd-toc/         # <-- allow the folder itself
-!wp-content/plugins/custom-pd-toc/**       # <-- track everything inside
+!wp-content/plugins/                       # allow Git to descend
 
-# you can leave the other custom-plugin rules as they were
+# --- custom-pd-toc ----------------------------------------------------------
+!wp-content/plugins/custom-pd-toc/         # allow the folder itself
+!wp-content/plugins/custom-pd-toc/**       # everything inside
+
+# --- horizontal-scroll-index ------------------------------------------------
+!wp-content/plugins/horizontal-scroll-index/
 !wp-content/plugins/horizontal-scroll-index/**
+
+# --- pd-mailpoet-automation-cloner -----------------------------------------
+!wp-content/plugins/pd-mailpoet-automation-cloner/
 !wp-content/plugins/pd-mailpoet-automation-cloner/**
+
+# --- PD_warm_cf_cache -------------------------------------------------------
+!wp-content/plugins/PD_warm_cf_cache/
 !wp-content/plugins/PD_warm_cf_cache/**
+
+# --- pdnotion ---------------------------------------------------------------
+!wp-content/plugins/pdnotion/
 !wp-content/plugins/pdnotion/**
+
+# --- generator-load-calculator ---------------------------------------------
+!wp-content/plugins/generator-load-calculator/
 !wp-content/plugins/generator-load-calculator/**
+
+# --- custom-pdf-invoices ----------------------------------------------------
+!wp-content/plugins/custom-pdf-invoices/
 !wp-content/plugins/custom-pdf-invoices/**
+/wp-content/plugins/custom-pdf-invoices/vendor/**/*.ttf
+/wp-content/plugins/custom-pdf-invoices/vendor/**/*.otf
 
 ########################################
 # OS odds-and-ends
