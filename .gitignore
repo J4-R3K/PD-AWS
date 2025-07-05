@@ -1,0 +1,54 @@
+########################################
+# JetBrains / PhpStorm clutter
+########################################
+.idea/                        # one line nukes all sub-files
+
+########################################
+# WordPress core – we’re not versioning WP itself
+########################################
+/wp-admin/
+/wp-includes/
+/index.php
+/wp-*.php
+/xmlrpc.php
+/readme.html
+/license.txt
+
+########################################
+# Config & secrets
+########################################
+wp-config.php
+.htaccess
+*.env
+*.log
+
+########################################
+# Content that changes constantly
+########################################
+/wp-content/uploads/
+/upgrade/
+/wp-content/aiwm-backups/
+
+########################################
+# Example themes & plugins we don’t care about
+########################################
+/wp-content/themes/twenty*/
+ /wp-content/plugins/hello.php
+
+########################################
+# Keep **your** code – whitelist below
+########################################
+!wp-content/themes/hello-elementor-child/**        # ← child themei
+!wp-content/plugins/custom-pdf-invoices/**
+!wp-content/plugins/horizontal-scroll-index/**
+!wp-content/plugins/pd-mailpoet-automation-cloner/**
+!wp-content/plugins/PD_warm_cf_caches/**
+!wp-content/plugins/pdnotion/**
+!wp-content/plugins/custom-pd-toc/**            # ← add more as you go
+# everything else under plugins will stay ignored
+
+########################################
+# OS odds-and-ends
+########################################
+.DS_Store
+Thumbs.db
