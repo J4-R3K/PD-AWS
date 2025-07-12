@@ -604,74 +604,190 @@ function pd_scroll_progress_script() {
     <?php
 }
 
-/**
- * Duplicate post as draft link in admin post/page list.
- */
-function pd_duplicate_post_as_draft(){
-    global $wpdb;
-    if (! ( isset($_GET['post']) || isset($_POST['post'])  || ( isset($_REQUEST['action']) && 'pd_duplicate_post_as_draft' == $_REQUEST['action'] ) ) ) {
-        wp_die('No post to duplicate has been supplied!');
-    }
-    $post_id = (isset($_GET['post']) ? absint($_GET['post']) : absint($_POST['post']));
-    $post = get_post($post_id);
-
-    $new_post_author = wp_get_current_user()->ID;
-
-    if (isset($post) && $post != null) {
-        $args = array(
-            'comment_status' => $post->comment_status,
-            'ping_status'    => $post->ping_status,
-            'post_author'    => $new_post_author,
-            'post_content'   => $post->post_content,
-            'post_excerpt'   => $post->post_excerpt,
-            'post_name'      => $post->post_name . '-copy',
-            'post_parent'    => $post->post_parent,
-            'post_password'  => $post->post_password,
-            'post_status'    => 'draft',
-            'post_title'     => $post->post_title . ' (Copy)',
-            'post_type'      => $post->post_type,
-            'to_ping'        => $post->to_ping,
-            'menu_order'     => $post->menu_order
-        );
-        $new_post_id = wp_insert_post($args);
-
-        // Copy taxonomies
-        $taxonomies = get_object_taxonomies($post->post_type);
-        foreach ($taxonomies as $taxonomy) {
-            $post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
-            wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
-        }
-
-        // Copy meta
-        $post_meta = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
-        if (count($post_meta)!=0) {
-            foreach ($post_meta as $meta_info) {
-                if($meta_info->meta_key == '_wp_old_slug') continue;
-                add_post_meta($new_post_id, $meta_info->meta_key, maybe_unserialize($meta_info->meta_value));
-            }
-        }
-
-        wp_redirect( admin_url( 'post.php?action=edit&post=' . $new_post_id ) );
-        exit;
-    } else {
-        wp_die('Post creation failed, could not find original post: ' . $post_id);
-    }
-}
-add_action( 'admin_action_pd_duplicate_post_as_draft', 'pd_duplicate_post_as_draft' );
-
-function pd_duplicate_post_link( $actions, $post ) {
-    if (current_user_can('edit_posts')) {
-        $actions['duplicate'] = '<a href="' . wp_nonce_url('admin.php?action=pd_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Duplicate</a>';
-    }
-    return $actions;
-}
-add_filter( 'post_row_actions', 'pd_duplicate_post_link', 10, 2 );
-add_filter( 'page_row_actions', 'pd_duplicate_post_link', 10, 2 );
-
 /*this is to ensure icons are showing in PD widgets */
 add_action('wp_enqueue_scripts', function() {
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 });
+
+
+/**
+ * PD Elementor Duplicator
+ * --------------------------------------------------
+ * • Keeps all Elementor / Elementor-Pro widgets intact
+ * • Row-action + Admin-bar “Duplicate” links
+ * • Optional per-CPT enable: set option pd_dup_post_type = 'all' | 'post' | 'page' | 'your_cpt'
+ * • Redirects back to the list screen after duplicating
+ */
+
+if (!class_exists('PD_Elementor_Duplicator')) {
+
+    class PD_Elementor_Duplicator
+    {
+
+        const ACTION = 'pd_duplicate';
+        const NONCE_KEY = 'pd_dup_key';
+        const NONCE_NAME = 'pd_dup_nonce';
+
+        /* ───────────  BOOT  ─────────── */
+        public static function init()
+        {
+            $self = new self;
+            add_action('admin_action_' . self::ACTION, [$self, 'duplicate']);
+            add_filter('post_row_actions', [$self, 'row_actions'], 10, 2);
+            add_filter('page_row_actions', [$self, 'row_actions'], 10, 2);
+            add_action('admin_bar_menu', [$self, 'admin_bar_menu'], 10000);
+        }
+
+        /* ───────────  UI HELPERS  ─────────── */
+
+        private function dup_url($post_id)
+        {
+            $url = add_query_arg(
+                ['action' => self::ACTION, 'post' => (int)$post_id],
+                admin_url('admin.php')
+            );
+            return wp_nonce_url($url, self::NONCE_KEY, self::NONCE_NAME);
+        }
+
+        private function is_enabled_for_post_type($type)
+        {
+            $opt = get_option('pd_dup_post_type', 'all'); // change in Settings ▸ Writing if desired
+            return ('all' === $opt || $opt === $type);
+        }
+
+        public function row_actions($actions, $post)
+        {
+            if ($this->is_enabled_for_post_type($post->post_type) && current_user_can('edit_post', $post->ID)) {
+                $actions['pd_duplicate'] =
+                    sprintf('<a href="%s">%s</a>', esc_url($this->dup_url($post->ID)), __('PD_duplicate', 'hello-child'));
+            }
+            return $actions;
+        }
+
+        public function admin_bar_menu($bar)
+        {
+            global $pagenow, $post;
+            if ($pagenow === 'post.php' &&
+                $post instanceof WP_Post &&
+                $this->is_enabled_for_post_type($post->post_type) &&
+                current_user_can('edit_post', $post->ID)) {
+
+                $bar->add_menu([
+                    'id' => 'pd-duplicator',
+                    'title' => __('Duplicate', 'hello-child'),
+                    'href' => $this->dup_url($post->ID),
+                ]);
+            }
+        }
+
+        /* ───────────  DUPLICATOR  ─────────── */
+
+        public function duplicate()
+        {
+
+            $post_id = isset($_REQUEST['post']) ? absint($_REQUEST['post']) : 0;
+
+            if (!$post_id ||
+                !isset($_REQUEST[self::NONCE_NAME]) ||
+                !wp_verify_nonce($_REQUEST[self::NONCE_NAME], self::NONCE_KEY) ||
+                !current_user_can('edit_post', $post_id)) {
+                wp_die(__('You are not allowed to duplicate this item.', 'hello-child'));
+            }
+
+            $post = get_post($post_id);
+            if (!$post) {
+                wp_die(__('Original post not found.', 'hello-child'));
+            }
+
+            /* 1️⃣  Insert the draft shell */
+            $new_post_id = wp_insert_post([
+                'post_author' => get_current_user_id(),
+                'post_title' => $post->post_title . ' (Copy)',
+                'post_content' => $post->post_content,
+                'post_excerpt' => $post->post_excerpt,
+                'post_status' => 'draft',
+                'post_type' => $post->post_type,
+                'post_parent' => $post->post_parent,
+                'post_name' => $post->post_name . '-copy',
+                'menu_order' => $post->menu_order,
+                'comment_status' => $post->comment_status,
+                'ping_status' => $post->ping_status,
+                'post_password' => $post->post_password,
+                'to_ping' => $post->to_ping,
+            ]);
+
+            if (is_wp_error($new_post_id)) {
+                wp_die(__('Duplication failed.', 'hello-child'));
+            }
+
+            /* 2️⃣  Copy taxonomies */
+            foreach (get_object_taxonomies($post->post_type) as $tax) {
+                $terms = wp_get_object_terms($post_id, $tax, ['fields' => 'ids']);
+                wp_set_object_terms($new_post_id, $terms, $tax, false);
+            }
+
+            /* 3️⃣  Copy meta (Essential-Addons style) */
+            global $wpdb;
+
+            $skip = [
+                '_wp_old_slug',
+                '_elementor_css',          // let Elementor rebuild CSS
+                '_wc_average_rating',
+                '_wc_review_count',
+                '_wc_rating_count',
+            ];
+
+            $meta_rows = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id = %d",
+                    $post_id
+                )
+            );
+
+            if ($meta_rows) {
+                $values = [];
+                foreach ($meta_rows as $row) {
+                    if (in_array($row->meta_key, $skip, true)) {
+                        continue;
+                    }
+                    $values[] = $wpdb->prepare(
+                        '(%d, %s, %s)',
+                        $new_post_id,
+                        $row->meta_key,
+                        $row->meta_value
+                    );
+                }
+                if ($values) {
+                    $wpdb->query(
+                        "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) VALUES " . implode(',', $values)
+                    );
+                }
+            }
+
+            // Always clear Elementor HTML cache on the copy
+            delete_post_meta($new_post_id, '_elementor_element_cache');
+
+            /* 4️⃣  Flag as Elementor doc + regenerate CSS */
+            update_post_meta($new_post_id, '_elementor_edit_mode', 'builder');
+
+            if (class_exists('\Elementor\Core\Files\CSS\Post')) {
+                try {
+                    (new \Elementor\Core\Files\CSS\Post($new_post_id))->update();
+                } catch (\Exception $e) {
+                }
+                if (method_exists('\Elementor\Plugin', 'instance')) {
+                    \Elementor\Plugin::instance()->files_manager->clear_cache();
+                }
+            }
+
+            /* 5️⃣  Redirect back to the list table */
+            wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
+            exit;
+        }
+    }
+
+    PD_Elementor_Duplicator::init();
+}
 
 
 ?>

@@ -47,14 +47,14 @@ wp-content/themes/*
 ########################################
 # Whitelist YOUR plugins
 ########################################
-!wp-content/plugins/custom-pd-toc/
-!wp-content/plugins/horizontal-scroll-index/
-!wp-content/plugins/pd-mailpoet-automation-cloner/
-!wp-content/plugins/PD_warm_cf_cache/
-!wp-content/plugins/pd-media-credit/
-!wp-content/plugins/pdnotion/
-!wp-content/plugins/generator-load-calculator/
-!wp-content/plugins/custom-pdf-invoices/
+!wp-content/plugins/custom-pd-toc/**
+!wp-content/plugins/horizontal-scroll-index/**
+!wp-content/plugins/pd-mailpoet-automation-cloner/**
+!wp-content/plugins/PD_warm_cf_cache/**
+!wp-content/plugins/pd-media-credit/**
+!wp-content/plugins/pdnotion/**
+!wp-content/plugins/generator-load-calculator/**
+!wp-content/plugins/custom-pdf-invoices/**
 
 # But ignore vendor fonts in custom-pdf-invoices
 wp-content/plugins/custom-pdf-invoices/vendor/**/*.ttf
